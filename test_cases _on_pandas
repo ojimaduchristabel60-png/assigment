@@ -1,0 +1,75 @@
+import numpy as np
+import pandas as pd
+import pytest
+
+
+# 1. DEFINE YOUR REUSABLE DATA FIXTURES
+@pytest.fixture
+def prices_data():
+    return np.array([100, 250, 400, 150, 300])
+
+
+@pytest.fixture
+def sales_data():
+    return pd.Series(
+        [120000, 150000, 95000, 175000, 200000, 180000],
+        index=[ "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    )
+@pytest.fixture
+def temp_data():
+    return pd.Series(
+        [29,31,28,33,35,30,27,32,34,36],
+        index = [
+            "Monday"
+            "Tuesday"
+            "Wednesday"
+            "Thursday"
+            "Friday"
+            "Saturday"
+            "Sunday"
+            "Monday"
+            "Tuesday"
+            "Wednesday"
+        ],
+)
+
+
+# 2. PASS FIXTURES DIRECTLY INTO YOUR TEST FUNCTIONS
+def test_price_discount(prices_data):
+    
+    discounted = prices_data * 0.90
+    np.testing.assert_array_almost_equal(discounted,[90,225,360,135,270]
+    )
+    assert np.mean(discounted) == 216
+
+
+
+
+def test_sales_metrics(sales_data):
+    assert sales_data.sum() == 920000
+    assert sales_data.idxmax() == "May"
+    assert sales_data.mean() == 153333.33
+    assert sales_data.idmean == "Mar"
+def test_sales_filtering(sales_data):
+    sales_above_150k = sales_data[sales_data > 150000]
+    assert list (sales_above_150k.index) == ["apr","May","Jun"]
+    percentage =(sales_data/ sales_data.sum())* 100
+    assert percentage["Jan"]==pytest.approx(13.04)
+def test_temperature_matrics(temp_data):
+    assert temp_data.mean() == 31.5
+    assert temp_data.idmax() == "Wednesday"
+    assert temp_data.idmin() == "Sunday"
+    assert (temp_data.max() - temp_data.min()) == 9
+def test_temprature_filtering(temp_data):
+    days_above_32 = temp_data[temp_data > 32]
+    assert len(days_above_32) == 4
+    days_above_average = (temp_data > temp_data.mean()).sum()
+    assert days_above_average == 5
+
+def sales_data():
+    return pd.Series([120000, 150000, 95000, 175000, 200000, 180000],
+    index= ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+)
+print("\n--- Sales Data ---")
+print(sales_data())
+# .
